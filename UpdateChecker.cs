@@ -1,4 +1,6 @@
-﻿namespace LancachePrefill.Common
+﻿using Color = Spectre.Console.Color;
+
+namespace LancachePrefill.Common
 {
     public static class UpdateChecker
     {

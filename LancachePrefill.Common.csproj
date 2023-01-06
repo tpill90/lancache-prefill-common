@@ -29,6 +29,7 @@
     <!-- External Packages -->
     <PackageReference Include="ByteSize" Version="2.1.1" />
     <PackageReference Include="CliFx" Version="2.3.0" />
+    <PackageReference Include="Terminal.Gui" Version="1.7.2" />
     <PackageReference Include="Wcwidth" Version="1.0.0" />
 
     <!-- Custom Spectre.Console build -->

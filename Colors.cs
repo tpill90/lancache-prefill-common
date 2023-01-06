@@ -1,4 +1,6 @@
-﻿namespace LancachePrefill.Common
+﻿using Color = Spectre.Console.Color;
+
+namespace LancachePrefill.Common
 {
     /// <summary>
     /// https://spectreconsole.net/appendix/colors
