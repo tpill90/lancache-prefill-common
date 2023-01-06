@@ -25,6 +25,11 @@
                               .Spinner(Spinner.Known.Dots2);
         }
 
+        public static Progress CreateSpectreProgress(this IAnsiConsole ansiConsole)
+        {
+            return CreateSpectreProgress(ansiConsole, TransferSpeedUnit.Bits, false);
+        }
+
         public static Progress CreateSpectreProgress(this IAnsiConsole ansiConsole, TransferSpeedUnit unit, bool displayTransferRate = true)
         {
             var displayBits = unit == TransferSpeedUnit.Bits;
