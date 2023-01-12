@@ -55,6 +55,32 @@
         }
 
         /// <summary>
+        /// Will log error messages to the console, only when <see cref="WriteVerboseLogs"/> has been set to true.
+        /// Message includes the elapsed time appended.
+        /// </summary>
+        /// <param name="message">Message text formatted with ANSI escape sequences</param>
+        public static void LogMarkupVerbose(this IAnsiConsole console, string message, Stopwatch stopwatch)
+        {
+            // Always write to the logfile
+            FileLogger.Log(message);
+
+            // Skip writing to console unless verbose logging is enabled
+            if (!WriteVerboseLogs)
+            {
+                return;
+            }
+
+            //TODO refactor this to share logic with LogMarkupLine
+            var messageWithTime = $"{FormattedTime} {message}";
+            // Taking the difference between the original message length, and the message length with markup removed.  
+            // Ensures that PadRight will align messages with markup correctly.
+            var paddingDiff = messageWithTime.Length - new Markup(messageWithTime).Length;
+
+            var formattedElapsedTime = stopwatch.Elapsed.ToString(@"ss\.FFFF");
+            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(formattedElapsedTime));
+        }
+
+        /// <summary>
         /// Logs an error message to the console, as well as to the log file.
         /// </summary>
         public static void LogMarkupError(this IAnsiConsole console, string message)
