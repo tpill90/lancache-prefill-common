@@ -7,14 +7,14 @@
         private int _maxItemLength;
         public int Length => _maxItemLength;
 
-        private List<AppInfo> _originalAppInfo;
-        private List<AppInfo> _currAppInfo;
+        private List<TuiAppInfo> _originalAppInfo;
+        private List<TuiAppInfo> _currAppInfo;
         private readonly bool _showReleaseDate;
         private readonly bool _showPlaytime;
 
-        public List<AppInfo> SelectedApps => _originalAppInfo.Where(e => e.IsSelected).ToList();
+        public List<TuiAppInfo> SelectedApps => _originalAppInfo.Where(e => e.IsSelected).ToList();
 
-        public AppInfoDataSource(List<AppInfo> itemList, bool showReleaseDate = true, bool showPlaytime = true)
+        public AppInfoDataSource(List<TuiAppInfo> itemList, bool showReleaseDate = true, bool showPlaytime = true)
         {
             _currAppInfo = itemList;
             _showReleaseDate = showReleaseDate;
@@ -97,7 +97,7 @@
             return String.Format("{0,-58}{1,8}{2,17}", "   Title", "Released", "Recent Playtime");
         }
 
-        private string FormatItemString(AppInfo item)
+        private string FormatItemString(TuiAppInfo item)
         {
             var nameFormatted = item.Title.Truncate(55).PadRightUnicode(55);
 

@@ -22,7 +22,7 @@
         /// </summary>
         private readonly List<string> _previouslySelectedApps;
 
-        public SelectAppsTui(List<AppInfo> availableGames, bool showReleaseDate = true, bool showPlaytime = true)
+        public SelectAppsTui(List<TuiAppInfo> availableGames, bool showReleaseDate = true, bool showPlaytime = true)
         {
             _showReleaseDate = showReleaseDate;
             _showPlaytime = showPlaytime;

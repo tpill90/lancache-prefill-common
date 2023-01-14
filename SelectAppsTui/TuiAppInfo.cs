@@ -1,10 +1,10 @@
 ﻿namespace LancachePrefill.Common.SelectAppsTui
 {
     //TODO document
-    public sealed class AppInfo
+    public sealed class TuiAppInfo
     {
-        public string AppId { get; init; }
-        public string Title { get; init; }
+        public string AppId { get; }
+        public string Title { get; }
         public DateTime? ReleaseDate { get; set; }
 
         public int? MinutesPlayed { get; set; }
@@ -12,7 +12,7 @@
 
         public bool IsSelected { get; set; }
 
-        public AppInfo(string appId, string title)
+        public TuiAppInfo(string appId, string title)
         {
             AppId = appId;
             Title = title;

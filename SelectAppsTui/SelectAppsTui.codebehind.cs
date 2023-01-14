@@ -46,7 +46,7 @@ namespace LancachePrefill.Common.SelectAppsTui
         #endregion
 
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "<Pending>")]
-        private void InitLayout(List<AppInfo> appInfos)
+        private void InitLayout(List<TuiAppInfo> appInfos)
         {
             View.Driver.Checked = _listViewCheckedSymbol;
             View.Driver.UnChecked = _listViewUncheckedSymbol;
