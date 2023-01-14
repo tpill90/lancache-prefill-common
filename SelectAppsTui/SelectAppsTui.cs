@@ -37,6 +37,7 @@
             _statusBar.Items = new StatusItem[] {
                 new StatusItem(Key.Esc, "~ESC~ to Quit", () =>
                 {
+                    // Prevents a user from making changes and accidentally losing them by hitting escape
                     if (UserHasUnsavedChanges())
                     {
                         var message = $"If you exit the app, any changes you have made will be lost. {Environment.NewLine}  Are you sure that you want to exit?";
@@ -49,7 +50,6 @@
                             return;
                         }
                     }
-
                     _exitKeyPress = Key.Esc;
                     Application.RequestStop(Application.Top);
                     Application.Top.SetNeedsDisplay();
@@ -68,6 +68,15 @@
                 }),
                 new StatusItem (Key.Enter, "~Enter~ to Save", () =>
                 {
+                    // Prevents the user from hitting ENTER without selecting anything to prefill
+                    if (!ListViewDataSource.SelectedApps.Any())
+                    {
+                        var message = $"No apps have been selected!  {Environment.NewLine}" +
+                                            "At least one app is required to continue, and can be selected using the space bar.";
+                        MessageBox.Query(width: 80, height: 6, "No apps selected!",message, "Close");
+
+                        return;
+                    }
                     _exitKeyPress = Key.Enter;
                     Application.RequestStop(Application.Top);
                     Application.Top.SetNeedsDisplay();
