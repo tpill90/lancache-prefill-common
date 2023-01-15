@@ -3,6 +3,8 @@ using Attribute = Terminal.Gui.Attribute;
 
 namespace LancachePrefill.Common.SelectAppsTui
 {
+    [SuppressMessage("Naming", "CA1724: Type names should not match namespaces",
+        Justification = "I don't want to change the namespace or class name, any other name might make it harder to understand")]
     public sealed partial class SelectAppsTui : IDisposable
     {
         #region Style overrides

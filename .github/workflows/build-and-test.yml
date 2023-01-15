@@ -42,7 +42,7 @@ jobs:
       run: |
         version=$(grep -Po '(?<=<VersionPrefix>)(.*?)(?=</VersionPrefix>)' ${{inputs.PROJECT_NAME}}/${{inputs.PROJECT_NAME}}.csproj); 
         echo "version=$version" >> $GITHUB_OUTPUT;
-        suffix=$(date +"%m%d%H%M");
+        suffix=$(date +"%-m%d%H%M");
         echo "suffix=$suffix" >> $GITHUB_OUTPUT
     - run: apt-get update
     - run: apt-get install zip -y

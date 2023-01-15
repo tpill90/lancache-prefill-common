@@ -32,7 +32,7 @@
                                                     .ToList();
 
             InitLayout(availableGames);
-            
+
             // Configuring status bar actions
             _statusBar.Items = new StatusItem[] {
                 new StatusItem(Key.Esc, "~ESC~ to Quit", () =>
