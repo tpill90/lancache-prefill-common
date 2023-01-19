@@ -33,9 +33,8 @@
             // Ensures that PadRight will align messages with markup correctly.
             var paddingDiff = messageWithTime.Length - new Markup(messageWithTime).Length;
 
-            var formattedElapsedTime = stopwatch.Elapsed.ToString(@"ss\.FFFF");
-            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(formattedElapsedTime));
-            FileLogger.Log($"{message} {formattedElapsedTime}");
+            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(stopwatch.FormatElapsedString()));
+            FileLogger.Log($"{message} {stopwatch.FormatElapsedString()}");
         }
 
         /// <summary>
@@ -70,14 +69,12 @@
                 return;
             }
 
-            //TODO refactor this to share logic with LogMarkupLine
             var messageWithTime = $"{FormattedTime} {message}";
             // Taking the difference between the original message length, and the message length with markup removed.  
             // Ensures that PadRight will align messages with markup correctly.
             var paddingDiff = messageWithTime.Length - new Markup(messageWithTime).Length;
 
-            var formattedElapsedTime = stopwatch.Elapsed.ToString(@"ss\.FFFF");
-            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(formattedElapsedTime));
+            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(stopwatch.FormatElapsedString()));
         }
 
         /// <summary>

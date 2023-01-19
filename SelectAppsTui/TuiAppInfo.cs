@@ -1,6 +1,5 @@
 ﻿namespace LancachePrefill.Common.SelectAppsTui
 {
-    //TODO document
     public sealed class TuiAppInfo
     {
         public string AppId { get; }

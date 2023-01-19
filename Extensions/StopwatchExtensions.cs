@@ -2,10 +2,14 @@
 {
     public static class StopwatchExtensions
     {
-        //TODO document
+        /// <summary>
+        /// Formats the elapsed time, omitting any leading 0's.
+        ///
+        /// For example, if the total elapsed time 15 minutes, the result would be "15:00.00
+        /// </summary>
         public static string FormatElapsedString(this Stopwatch stopwatch)
         {
-            var elapsed = stopwatch.Elapsed;
+            TimeSpan elapsed = stopwatch.Elapsed;
             if (elapsed.TotalHours > 1)
             {
                 return elapsed.ToString(@"h\:mm\:ss\.ff");

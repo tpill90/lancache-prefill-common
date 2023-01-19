@@ -2,7 +2,13 @@
 {
     public static class OperatingSystemUtils
     {
-        //TODO document
+        /// <summary>
+        /// Detects if the user has double clicked the prefill .exe from Windows explorer, and displays a warning
+        /// that a CLI app must be correctly run from a terminal session.
+        ///
+        /// Only checks on Windows, ignores other operating systems.
+        /// </summary>
+        /// <param name="appName"></param>
         public static void DetectDoubleClickOnWindows(string appName)
         {
 #if OS_WINDOWS
@@ -26,6 +32,4 @@
 #endif
         }
     }
-
-    // This code uses Windows kernel specific functions, shouldn't be included in compilation on other platforms
 }

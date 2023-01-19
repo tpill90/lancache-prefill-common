@@ -1,4 +1,5 @@
-﻿#if OS_WINDOWS
+﻿// This code uses Windows kernel specific functions, shouldn't be included in compilation on other platforms
+#if OS_WINDOWS
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
