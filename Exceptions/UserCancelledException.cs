@@ -1,6 +1,5 @@
 ﻿namespace LancachePrefill.Common.Exceptions
 {
-    [Serializable]
     public class UserCancelledException : Exception
     {
         protected UserCancelledException(SerializationInfo info, StreamingContext context) : base(info, context)
