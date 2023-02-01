@@ -1,10 +1,7 @@
-﻿using System.Net.Sockets;
-
-namespace LancachePrefill.Common
+﻿namespace LancachePrefill.Common
 {
     /// <summary>
-    /// Attempts to automatically resolve the Lancache's IP address,
-    /// allowing users to be able to run the prefill on the same machine as the Lancache.
+    /// Attempts to automatically resolve the Lancache's IP address, allowing users to be able to run the prefill on the same machine as the Lancache.
     ///
     /// Will automatically try to detect the Lancache through the poisoned DNS entries, however if that is not possible it will then check
     /// 'localhost' to see if the Lancache is available locally.  If the server is not available on 'localhost', then 172.17.0.1 will be checked to see if
@@ -14,6 +11,8 @@ namespace LancachePrefill.Common
     {
         private static IAnsiConsole _ansiConsole;
         private static DetectedServer _detectedServer;
+
+        private static readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromMilliseconds(500) };
 
         [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "Analyzer is incorrectly detecting dead code due to Spectre.Console block")]
         public static async Task<string> ResolveLancacheIpAsync(IAnsiConsole ansiConsole, string cdnUrl)
@@ -39,48 +38,46 @@ namespace LancachePrefill.Common
 
             // If no server was detected, checks for common configuration issues
             await DetectPublicIpAsync(cdnUrl);
-            return null;
+            await IsLancacheServerRunningAsync(cdnUrl);
+
+            throw new LancacheNotFoundException("Unable to detect Lancache server!");
         }
 
         private static async Task<DetectedServer> DetectLancacheServerAsync(string cdnUrl)
         {
-            using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
-
-            // Tries to resolve poisoned DNS record, then localhost, then Docker's host
-            var possibleLancacheUrls = new List<string> { cdnUrl, "localhost", "172.17.0.1" };
+            // Tries to resolve poisoned DNS record, then localhost, then Docker's host, and finally the local machine
+            var localMachineName = Dns.GetHostName();
+            var possibleLancacheUrls = new List<string> { cdnUrl, "localhost", "172.17.0.1", localMachineName };
 
             foreach (var url in possibleLancacheUrls)
             {
-                // Gets a list of ipv4 addresses
+                // Gets a list of ipv4 addresses, Lancache cannot use ipv6 currently
                 var ipAddresses = (await Dns.GetHostAddressesAsync(url))
                     .Where(e => e.AddressFamily == AddressFamily.InterNetwork)
                     .ToArray();
 
-                // If there are no public IPs, then continue onto the next url
-                if (!ipAddresses.Any(e => e.IsInternal()))
+                // If there are no public IPs, then continue onto the next url.  Lancache's IP must resolve to an RFC 1918 address
+                if (!ipAddresses.Any(e => e.IsPrivateAddress()))
                 {
                     continue;
                 }
 
-                try
+                // DNS hostnames can possibly resolve to more than one IP address (one-to-many), so we must check each one for a Lancache server
+                foreach (var ip in ipAddresses)
                 {
-                    // If the IP resolves to a private subnet, then we want to query the Lancache server to see if it is actually there.
-                    var response = await httpClient.GetAsync(new Uri($"http://{url}/lancache-heartbeat"));
-                    if (response.Headers.Contains("X-LanCache-Processed-By"))
+                    try
                     {
-                        return new DetectedServer(url, ipAddresses[0]);
+                        // If the IP resolves to a private subnet, then we want to query the Lancache server to see if it is actually there.
+                        var response = await _httpClient.GetAsync(new Uri($"http://{ip}/lancache-heartbeat"));
+                        if (response.Headers.Contains("X-LanCache-Processed-By"))
+                        {
+                            return new DetectedServer(url, ip);
+                        }
                     }
-                    if (!response.Headers.Contains("X-LanCache-Processed-By") && url == cdnUrl)
+                    catch (Exception e) when (e is HttpRequestException | e is TaskCanceledException)
                     {
-                        _ansiConsole.MarkupLine(Red($" Error!  {White(cdnUrl)} is resolving to a private IP address {Cyan($"({ipAddresses.First()})")},\n" +
-                                                    " however no Lancache can be found at that address.\n" +
-                                                    " Please check your configuration, and try again.\n"));
-                        throw new LancacheNotFoundException($"No Lancache server detected at {ipAddresses.First()}");
+                        // Catching target machine refused connection + timeout exceptions, so we can try the next address
                     }
-                }
-                catch (Exception e) when (e is HttpRequestException | e is TaskCanceledException)
-                {
-                    // Catching target machine refused connection + timeout exceptions, so we can try the next address
                 }
             }
             return null;
@@ -89,24 +86,36 @@ namespace LancachePrefill.Common
         private static async Task DetectPublicIpAsync(string cdnUrl)
         {
             var ipAddresses = await Dns.GetHostAddressesAsync(cdnUrl);
-            if (ipAddresses.Any(e => e.IsInternal()))
+            var resolvedIp = ipAddresses.First(e => e.AddressFamily == AddressFamily.InterNetwork);
+
+            if (ipAddresses.Any(e => e.IsPrivateAddress()))
             {
                 return;
             }
 
             // If a public IP address is resolved, then it means that the Lancache is not configured properly, and we would end up downloading from the internet.
-            // This will prompt a user to see if they still want to continue, as downloading from the internet could still be a good download speed test.
-            _ansiConsole.MarkupLine(LightYellow($" Warning!  {White(cdnUrl)} is resolving to a public IP address {Cyan($"({ipAddresses.First()})")}.\n" +
+            _ansiConsole.MarkupLine(LightYellow($" Warning!  {White(cdnUrl)} is resolving to a public IP address {Cyan($"({resolvedIp})")}.\n" +
                                                 " Prefill will download directly from the internet, and will not be cached by Lancache.\n"));
 
-            var publicDownloadOverride = _ansiConsole.Prompt(new SelectionPrompt<bool>()
-                                                             .Title("Continue anyway?")
-                                                             .AddChoices(true, false)
-                                                             .UseConverter(e => e == false ? "No" : "Yes"));
+            throw new LancacheNotFoundException($"Lancache server is resolving to a public IP : {resolvedIp}");
+        }
 
-            if (publicDownloadOverride == false)
+        private static async Task IsLancacheServerRunningAsync(string cdnUrl)
+        {
+            var ipAddresses = await Dns.GetHostAddressesAsync(cdnUrl);
+            var resolvedIp = ipAddresses.First(e => e.AddressFamily == AddressFamily.InterNetwork);
+
+            try
             {
-                throw new UserCancelledException("User cancelled download!");
+                // Attempting to see if the Lancache server at the resolved IP is running
+                await _httpClient.GetAsync(new Uri($"http://{resolvedIp}/lancache-heartbeat"));
+            }
+            catch (Exception e) when (e is HttpRequestException | e is TaskCanceledException)
+            {
+                _ansiConsole.MarkupLine(Red($" Error!  {White(cdnUrl)} is resolving to a private IP address {Cyan($"({resolvedIp})")},\n" +
+                                            " however no Lancache can be found at that address.  The Lancache server may possibly not be running." +
+                                            " Please check your configuration, and try again.\n"));
+                throw new LancacheNotFoundException($"No Lancache server detected at {resolvedIp}");
             }
         }
 

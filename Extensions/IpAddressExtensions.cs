@@ -3,11 +3,11 @@
     public static class IpAddressExtensions
     {
         /// <summary>
-        /// An extension method to determine if an IP address is internal, as specified in RFC1918
+        /// An extension method to determine if an IP address is a private address, as specified in RFC1918
         /// </summary>
         /// <param name="toTest">The IP address that will be tested</param>
-        /// <returns>Returns true if the IP is internal, false if it is external</returns>
-        public static bool IsInternal(this IPAddress toTest)
+        /// <returns>Returns true if the IP is a private address, false if it isn't private</returns>
+        public static bool IsPrivateAddress(this IPAddress toTest)
         {
             if (IPAddress.IsLoopback(toTest))
             {
