@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <!-- Defines a preprocessor constant that can be used to conditionally compile based on the target platform being Windows -->
-  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64'">
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' OR '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>OS_WINDOWS</DefineConstants>
   </PropertyGroup>
 
