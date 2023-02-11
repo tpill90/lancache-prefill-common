@@ -1,0 +1,23 @@
+name: build-and-test
+run-name: "Build and Test"
+on: [push]
+
+jobs:
+  dotnet-format:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - run: dotnet format ./LancachePrefill.Common.sln --verify-no-changes
+  build-test:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - run: dotnet restore
+    - run: dotnet build --no-restore -c Release /p:TreatWarningsAsErrors=true
+    - run: dotnet test --no-restore -c Release /p:WarningLevel=0
