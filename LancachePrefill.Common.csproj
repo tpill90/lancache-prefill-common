@@ -24,13 +24,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove=".editorconfig" />
-    <None Remove=".gitignore" />
-    <None Remove="LICENSE" />
-    <None Remove="README.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- External Packages -->
     <PackageReference Include="ByteSize" Version="2.1.1" />
     <PackageReference Include="CliFx" Version="2.3.0" />
@@ -39,7 +32,7 @@
 
     <!-- Custom Spectre.Console build -->
     <Reference Include="Spectre.Console">
-      <HintPath>..\lib\Spectre.Console.dll</HintPath>
+      <HintPath>.\lib\Spectre.Console.dll</HintPath>
     </Reference>
 
     <!-- Analyzers -->
@@ -59,6 +52,19 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="lib\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <None Remove="lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".editorconfig" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
+    <None Remove="README.md" />
   </ItemGroup>
 
 </Project>
