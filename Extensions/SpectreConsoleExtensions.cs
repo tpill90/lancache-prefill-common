@@ -53,6 +53,7 @@
             return spectreProgress;
         }
 
+        // TODO this is Steam specific.  Should move out of here.
         public static async Task<string> ReadPasswordAsync(this IAnsiConsole console, string promptText = null)
         {
             var promptTask = Task.Run(() =>

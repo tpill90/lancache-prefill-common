@@ -1,3 +1,5 @@
+# These jobs definitions are referenced and used by the other prefill projects
+# TODO rename this to something like build-and-test-template.yml
 name: 'build-test-dotnet'
 on:
   workflow_call:
@@ -70,6 +72,6 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: SteamPrefill-${{ steps.vars.outputs.version }}-${{ steps.vars.outputs.suffix }}-${{ matrix.runtime }} 
+        name: ${{inputs.PROJECT_NAME}}-${{ steps.vars.outputs.version }}-${{ steps.vars.outputs.suffix }}-${{ matrix.runtime }} 
         path: publish/
         if-no-files-found: error 
