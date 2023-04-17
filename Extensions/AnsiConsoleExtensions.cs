@@ -86,6 +86,12 @@
             FileLogger.Log(message);
         }
 
+        public static void LogException(this IAnsiConsole console, Exception e)
+        {
+            console.WriteException(e, ExceptionFormats.ShortenPaths);
+            FileLogger.LogException(e);
+        }
+
         private static string FormattedTime => $"[[{DateTime.Now.ToString("h:mm:ss tt")}]]";
     }
 }

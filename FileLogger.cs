@@ -19,6 +19,11 @@
             }
         }
 
+        public static void LogException(Exception e)
+        {
+            Log(e.ToString());
+        }
+
         public static void LogException(string message, Exception e)
         {
             Log(message);
