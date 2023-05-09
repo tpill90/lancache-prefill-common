@@ -4,8 +4,13 @@ name: 'build-test-dotnet'
 on:
   workflow_call:
     inputs:
+      # Name of the project being build.  E.g BattlenetPrefill/EpicPrefill/SteamPrefill
       PROJECT_NAME:
           required: true
+          type: string
+      # Can be used to filter out certain tests/namespaces from the dotnet test run
+      DOTNET_TEST_FILTER:
+          required: false
           type: string
 
 jobs:
@@ -17,6 +22,7 @@ jobs:
       with:
         submodules: true
     - run: dotnet format --verify-no-changes
+
   build-test:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/sdk:6.0
@@ -26,7 +32,8 @@ jobs:
         submodules: true
     - run: dotnet restore
     - run: dotnet build --no-restore -c Release /p:TreatWarningsAsErrors=true
-    - run: dotnet test --no-restore -c Release /p:WarningLevel=0
+    - run: dotnet test --no-restore -c Release /p:WarningLevel=0 --filter "${{inputs.DOTNET_TEST_FILTER}}"
+
   publish:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/sdk:6.0
