@@ -9,7 +9,7 @@
         private const string LogFilePath = "app.log";
         private static readonly object LockObject = new object();
 
-        public static void Log(string message)
+        internal static void Log(string message)
         {
             // Avoids writing to the same file concurrently.
             lock (LockObject)
