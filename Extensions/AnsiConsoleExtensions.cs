@@ -34,7 +34,7 @@
             var paddingDiff = messageWithTime.Length - new Markup(messageWithTime).Length;
 
             console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(stopwatch.FormatElapsedString()));
-            FileLogger.Log($"{message} {stopwatch.FormatElapsedString()}");
+            FileLogger.Log(message, stopwatch);
         }
 
         /// <summary>
@@ -60,21 +60,20 @@
         /// <param name="message">Message text formatted with ANSI escape sequences</param>
         public static void LogMarkupVerbose(this IAnsiConsole console, string message, Stopwatch stopwatch)
         {
-            // Always write to the logfile
-            FileLogger.Log(message);
-
-            // Skip writing to console unless verbose logging is enabled
-            if (!WriteVerboseLogs)
-            {
-                return;
-            }
-
-            var messageWithTime = $"{FormattedTime} {message}";
+            var messageWithTimestamp = $"{FormattedTime} {message}";
             // Taking the difference between the original message length, and the message length with markup removed.  
             // Ensures that PadRight will align messages with markup correctly.
-            var paddingDiff = messageWithTime.Length - new Markup(messageWithTime).Length;
+            var paddingDiff = messageWithTimestamp.Length - new Markup(messageWithTimestamp).Length;
 
-            console.MarkupLine(messageWithTime.PadRight(65 + paddingDiff) + LightYellow(stopwatch.FormatElapsedString()));
+            var withElapsedTime = messageWithTimestamp.PadRight(65 + paddingDiff) + LightYellow(stopwatch.FormatElapsedString());
+
+            // Always write to the logfile
+            FileLogger.Log(message, stopwatch);
+
+            if (WriteVerboseLogs)
+            {
+                console.MarkupLine(withElapsedTime);
+            }
         }
 
         /// <summary>

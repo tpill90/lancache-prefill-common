@@ -19,6 +19,18 @@
             }
         }
 
+        internal static void Log(string message, Stopwatch stopwatch)
+        {
+            // Avoids writing to the same file concurrently.
+            lock (LockObject)
+            {
+                var messageWithTimestamp = $"[{DateTime.Now.ToString("h:mm:ss tt")}] {message.RemoveMarkup()}";
+                var asd = $"{messageWithTimestamp.PadRight(70) + stopwatch.FormatElapsedString()}\n";
+
+                File.AppendAllText(LogFilePath, asd);
+            }
+        }
+
         public static void LogException(Exception e)
         {
             Log(e.ToString());
