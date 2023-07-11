@@ -37,6 +37,7 @@ namespace LancachePrefill.Common
     {
         public static Color LightGreen => new Color(99, 201, 101);
         public static Color LightRed => new Color(255, 110, 110);
+        public static Color LightYellow => new Color(249, 241, 165);
 
         public static Color MediumPurple1 => Color.MediumPurple1;
     }
