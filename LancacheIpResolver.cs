@@ -49,8 +49,10 @@
             var localMachineName = Dns.GetHostName();
             var possibleLancacheUrls = new List<string> { cdnUrl, "localhost", "172.17.0.1", localMachineName };
 
+            _ansiConsole.LogMarkupVerbose("Detecting Lancache Server IP....");
             foreach (var url in possibleLancacheUrls)
             {
+                _ansiConsole.LogMarkupVerbose($"Checking {Magenta(cdnUrl)}");
                 // Gets a list of ipv4 addresses, Lancache cannot use ipv6 currently
                 var ipAddresses = (await Dns.GetHostAddressesAsync(url))
                     .Where(e => e.AddressFamily == AddressFamily.InterNetwork)
@@ -62,11 +64,13 @@
                     continue;
                 }
 
+                _ansiConsole.LogMarkupVerbose($"Found {LightYellow(ipAddresses.Length)} addresses");
                 // DNS hostnames can possibly resolve to more than one IP address (one-to-many), so we must check each one for a Lancache server
                 foreach (var ip in ipAddresses)
                 {
                     try
                     {
+                        _ansiConsole.LogMarkupLine($"Testing {Cyan(ip.ToString())}");
                         // If the IP resolves to a private subnet, then we want to query the Lancache server to see if it is actually there.
                         var response = await _httpClient.GetAsync(new Uri($"http://{ip}/lancache-heartbeat"));
                         if (response.Headers.Contains("X-LanCache-Processed-By"))
