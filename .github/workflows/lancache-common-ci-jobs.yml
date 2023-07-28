@@ -11,6 +11,7 @@ jobs:
       with:
         submodules: true
     - run: dotnet format ./LancachePrefill.Common.sln --verify-no-changes
+    
   build-test:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/sdk:6.0
