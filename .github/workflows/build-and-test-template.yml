@@ -1,5 +1,4 @@
 # These jobs definitions are referenced and used by the other prefill projects
-# TODO rename this to something like build-and-test-template.yml
 name: 'build-test-dotnet'
 on:
   workflow_call:
