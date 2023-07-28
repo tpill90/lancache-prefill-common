@@ -31,12 +31,12 @@
 
     <!-- Custom CliFx build, allows for top level exception handling in application code, instead of CliFx swallowing all exceptions -->
     <Reference Include="CliFx">
-      <HintPath>.\lib\CliFx.dll</HintPath>
+      <HintPath>..\lib\CliFx.dll</HintPath>
     </Reference>
 
     <!-- Custom Spectre.Console build, includes changes to display transfer speed in bits -->
     <Reference Include="Spectre.Console">
-      <HintPath>.\lib\Spectre.Console.dll</HintPath>
+      <HintPath>..\lib\Spectre.Console.dll</HintPath>
     </Reference>
 
     <!-- Analyzers -->
