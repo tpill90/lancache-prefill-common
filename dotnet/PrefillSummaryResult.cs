@@ -8,7 +8,9 @@
         public int UnownedAppsSkipped { get; set; }
 
         private int _totalGamesPrefilled => AlreadyUpToDate + FailedApps + Updated;
-        private Stopwatch PrefillElapsedTime { get; } = Stopwatch.StartNew();
+
+        public ByteSize TotalBytesTransferred { get; set; }
+        public Stopwatch PrefillElapsedTime { get; } = Stopwatch.StartNew();
 
         public void RenderSummaryTable(IAnsiConsole ansiConsole)
         {
@@ -42,9 +44,10 @@
             }
             table.AddRow(rowFields.ToArray());
 
+            var totalBytesTransferred = TotalBytesTransferred;
             var grid = new Grid()
                        .AddColumn(new GridColumn())
-                       .AddRow($" Prefilled {Magenta(_totalGamesPrefilled)} apps in {LightYellow(PrefillElapsedTime.FormatElapsedString())}")
+                       .AddRow($" Prefilled {Magenta(_totalGamesPrefilled)} apps totaling {Magenta(totalBytesTransferred.ToDecimalString())} in {LightYellow(PrefillElapsedTime.FormatElapsedString())}")
                        .AddRow(table);
 
             ansiConsole.Write(new Rule());
