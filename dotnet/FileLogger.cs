@@ -41,5 +41,10 @@
             Log(message);
             Log(e.ToString());
         }
+
+        public static void LogExceptionNoStackTrace(string message, Exception e)
+        {
+            Log($"{message} : {e.Message}");
+        }
     }
 }
