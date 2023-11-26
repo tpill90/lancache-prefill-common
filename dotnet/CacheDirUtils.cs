@@ -21,7 +21,7 @@
             {
                 // Gets base directories for the XDG Base Directory specification (Linux)
                 string pathHome = Environment.GetEnvironmentVariable("HOME")
-                                  ?? throw new ArgumentNullException("HOME", "Could not determine HOME directory");
+                                  ?? throw new Exception("Could not determine HOME directory");
 
                 string pathXdgCacheHome = Environment.GetEnvironmentVariable("XDG_CACHE_HOME")
                                           ?? Path.Combine(pathHome, ".cache");

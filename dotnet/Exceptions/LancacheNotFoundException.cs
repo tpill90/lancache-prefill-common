@@ -1,12 +1,7 @@
 ﻿namespace LancachePrefill.Common.Exceptions
 {
-    public class LancacheNotFoundException : Exception
+    public sealed class LancacheNotFoundException : Exception
     {
-        protected LancacheNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-
-        }
-
         public LancacheNotFoundException()
         {
 
