@@ -1,12 +1,9 @@
 ﻿namespace LancachePrefill.Common.Enums
 {
-    public sealed class TransferSpeedUnit : EnumBase<TransferSpeedUnit>
+    [Intellenum(typeof(string))]
+    public sealed partial class TransferSpeedUnit
     {
-        public static readonly TransferSpeedUnit Bits = new TransferSpeedUnit("bits");
-        public static readonly TransferSpeedUnit Bytes = new TransferSpeedUnit("bytes");
-
-        private TransferSpeedUnit(string name) : base(name)
-        {
-        }
+        public static readonly TransferSpeedUnit Bits = new("bits");
+        public static readonly TransferSpeedUnit Bytes = new("bytes");
     }
 }

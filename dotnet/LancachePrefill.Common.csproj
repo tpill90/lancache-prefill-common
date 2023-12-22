@@ -31,8 +31,13 @@
   <ItemGroup>
     <!-- External Packages -->
     <PackageReference Include="ByteSize" Version="2.1.1" />
+    <PackageReference Include="Intellenum" Version="1.0.0-beta.3" />
     <PackageReference Include="Terminal.Gui" Version="1.7.2" />
     <PackageReference Include="Wcwidth" Version="1.0.0" />
+    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="1.2.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 
     <!-- Custom CliFx build, allows for top level exception handling in application code, instead of CliFx swallowing all exceptions -->
     <Reference Include="CliFx">
