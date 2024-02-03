@@ -14,7 +14,6 @@
 
         private static readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromMilliseconds(500) };
 
-        [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "Analyzer is incorrectly detecting dead code due to Spectre.Console block")]
         public static async Task<string> ResolveLancacheIpAsync(IAnsiConsole ansiConsole, string cdnUrl)
         {
             _ansiConsole ??= ansiConsole;
