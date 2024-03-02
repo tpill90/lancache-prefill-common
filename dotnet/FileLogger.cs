@@ -44,7 +44,7 @@
 
         public static void LogExceptionNoStackTrace(string message, Exception e)
         {
-            Log($"{message} : {e.Message}");
+            Log($"{message} : {e.GetType()} - {e.Message}");
         }
     }
 }
