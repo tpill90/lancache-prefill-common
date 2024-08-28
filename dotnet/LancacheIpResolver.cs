@@ -75,7 +75,8 @@
                     }
                     catch (Exception e) when (e is HttpRequestException | e is TaskCanceledException)
                     {
-                        // Catching target machine refused connection + timeout exceptions, so we can try the next address
+                        // Target machine refused connection errors are to be expected if there is no Lancache at that IP address.
+                        // We will be catching those exceptions as well as timeout exceptions, so we can try the next IP address.
                     }
                 }
             }
