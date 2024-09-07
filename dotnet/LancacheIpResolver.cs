@@ -55,7 +55,7 @@
                     .Where(e => e.AddressFamily == AddressFamily.InterNetwork)
                     .ToArray();
 
-                // If there are no public IPs, then continue onto the next url.  Lancache's IP must resolve to an RFC 1918 address
+                // If there are no private IPs, then continue onto the next url.  Lancache's IP must resolve to an RFC 1918 address
                 if (!ipAddresses.Any(e => e.IsPrivateAddress()))
                 {
                     continue;
