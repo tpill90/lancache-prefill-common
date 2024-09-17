@@ -5,16 +5,16 @@ namespace LancachePrefill.Common
     public static class UpdateChecker
     {
         /// <summary>
-        /// Compares the current application version against the newest version available on Github Releases.
+        /// Compares the current application version against the newest version available on GitHub Releases.
         /// If there is a newer version, displays a message to the user.
         /// </summary>
         /// <param name="repoName">Expected to be in the format "username/repoName"</param>
-        public static async Task CheckForUpdatesAsync(Type executingAppType, string repoName, string cacheDir)
+        public static async Task CheckForUpdatesAsync(Type executingAppType, string repoName, string tempDir)
         {
-            string lastUpdateCheckFile = Path.Combine(cacheDir, "lastUpdateCheck.txt");
+            string lastUpdateCheckFile = Path.Combine(tempDir, "lastUpdateCheck.txt");
             try
             {
-                //Will only check for updates once every 3 days. 
+                //Will only check for updates once every 3 days.
                 var fileInfo = new FileInfo(lastUpdateCheckFile);
                 if (fileInfo.Exists && fileInfo.LastWriteTimeUtc.AddDays(3) > DateTime.UtcNow)
                 {
@@ -27,7 +27,7 @@ namespace LancachePrefill.Common
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
                 httpClient.DefaultRequestHeaders.Add("User-Agent", repoName);
 
-                // Query Github for a list of all available releases
+                // Query GitHub for a list of all available releases
                 var response = await httpClient.GetStringAsync(new Uri($"https://api.github.com/repos/{repoName}/releases"));
                 GithubRelease latestRelease = JsonSerializer.Deserialize(response, SerializationContext.Default.ListGithubRelease)
                                                             .OrderByDescending(e => e.CreatedAt)
