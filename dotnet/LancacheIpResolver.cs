@@ -95,7 +95,8 @@
 
             // If a public IP address is resolved, then it means that the Lancache is not configured properly, and we would end up downloading from the internet.
             _ansiConsole.MarkupLine(LightYellow($" Warning!  {White(cdnUrl)} is resolving to a public IP address {Cyan($"({resolvedIp})")}.\n" +
-                                                " Prefill will download directly from the internet, and will not be cached by Lancache.\n"));
+                                                        $" {White(cdnUrl)} must resolve to a private RFC1918 address to work correctly.\n" +
+                                                         " Please check your Lancache configuration and try again.\n"));
 
             throw new LancacheNotFoundException($"Lancache server is resolving to a public IP : {resolvedIp}");
         }
