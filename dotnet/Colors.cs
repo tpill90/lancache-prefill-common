@@ -6,9 +6,13 @@ namespace LancachePrefill.Common
     /// https://spectreconsole.net/appendix/colors
     /// https://htmlcolorcodes.com/color-picker/
     /// </summary>
+    //TODO try to make the usage of these colors more uniform across all projects.  Each color should be commented detailing when it should be used
     public static class SpectreFormatters
     {
         public static string Blue(object inputObj) => $"[blue]{inputObj}[/]";
+
+        // Use this color for URLs
+        // TODO make sure all URLs use this color
         public static string Cyan(object inputObj) => $"[rgb(97,200,214)]{inputObj}[/]";
 
         public static string LightBlue(object inputObj) => $"[deepskyblue3]{inputObj}[/]";
