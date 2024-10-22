@@ -67,7 +67,6 @@ jobs:
           --runtime "${{ matrix.runtime }}" \
           --self-contained true \
           /p:PublishSingleFile=true \
-          /p:PublishReadyToRun=true \
           /p:PublishTrimmed=true; 
 
         cd publish;
