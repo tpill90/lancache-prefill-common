@@ -43,7 +43,7 @@
             if (displayTransferRate)
             {
                 columns.Add(new DownloadedColumn());
-                columns.Add(new TransferSpeedColumn { Base = FileSizeBase.Decimal, DisplayBits = displayBits });
+                columns.Add(new TransferSpeedColumn { Base = FileSizeBase.Decimal, ShowBits = displayBits });
             }
             var spectreProgress = ansiConsole.Progress()
                                              .HideCompleted(true)
