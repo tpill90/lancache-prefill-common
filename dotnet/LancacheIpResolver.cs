@@ -50,6 +50,7 @@
 
             foreach (var url in possibleLancacheUrls)
             {
+                _ansiConsole.LogMarkupVerbose($"Checking for Lancache at {Cyan(url)}");
                 //TODO make this do ipv6 correctly
                 // Gets a list of ipv4 addresses, Lancache cannot use ipv6 currently
                 var ipAddresses = (await Dns.GetHostAddressesAsync(url))
