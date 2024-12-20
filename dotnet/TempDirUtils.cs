@@ -36,8 +36,8 @@
             }
             if (OperatingSystem.IsMacOS())
             {
-                string pathLibraryCaches = Path.GetFullPath("~/Library/Caches");
-                return Path.Combine(pathLibraryCaches, appName, tempDirVersion);
+                string pathHome = Environment.GetEnvironmentVariable("HOME");
+                return Path.Combine(pathHome, "Library", "Caches", appName, tempDirVersion);
             }
 
             throw new NotSupportedException($"Unknown platform {RuntimeInformation.OSDescription}");
