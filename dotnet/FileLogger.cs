@@ -25,9 +25,9 @@
             lock (LockObject)
             {
                 var messageWithTimestamp = $"[{DateTime.Now.ToString("h:mm:ss tt")}] {message.RemoveMarkup()}";
-                var asd = $"{messageWithTimestamp.PadRight(70) + stopwatch.FormatElapsedString()}\n";
+                var formattedMessage = $"{messageWithTimestamp.PadRight(70) + stopwatch.FormatElapsedString()}\n";
 
-                File.AppendAllText(LogFilePath, asd);
+                File.AppendAllText(LogFilePath, formattedMessage);
             }
         }
 
