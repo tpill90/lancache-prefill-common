@@ -4,6 +4,8 @@
     {
         private readonly bool _showReleaseDate;
         private readonly bool _showPlaytime;
+        private readonly bool _showPurchaseDate;
+
         private ListView _listView;
         private TextField _searchBox;
         private StatusBar _statusBar;
@@ -22,10 +24,11 @@
         /// </summary>
         private readonly List<string> _previouslySelectedApps;
 
-        public SelectAppsTui(List<TuiAppInfo> availableGames, bool showReleaseDate = true, bool showPlaytime = true)
+        public SelectAppsTui(List<TuiAppInfo> availableGames, bool showReleaseDate = true, bool showPlaytime = true, bool showPurchaseDate = false)
         {
             _showReleaseDate = showReleaseDate;
             _showPlaytime = showPlaytime;
+            _showPurchaseDate = showPurchaseDate;
 
             _previouslySelectedApps = availableGames.Where(e => e.IsSelected)
                                                     .Select(e => e.AppId)
@@ -120,6 +123,12 @@
         private void SortPlaytime_OnClicked()
         {
             ListViewDataSource.SortPlaytime();
+            _listView.SetNeedsDisplay();
+        }
+
+        private void SortPurchaseDate_OnClicked()
+        {
+            ListViewDataSource.SortPurchaseDate();
             _listView.SetNeedsDisplay();
         }
 

@@ -4,21 +4,27 @@
     {
         public int Count => _currAppInfo != null ? _currAppInfo.Count : 0;
 
-        private int _maxItemLength;
+        private readonly int _maxItemLength;
         public int Length => _maxItemLength;
 
         private List<TuiAppInfo> _originalAppInfo;
         private List<TuiAppInfo> _currAppInfo;
+
+        // TODO refactor these flags to just be "_showAdditionalColumns" instead of picking and choosing.
+        // I don't want to implement all that conditional logic to be able to do so.
         private readonly bool _showReleaseDate;
         private readonly bool _showPlaytime;
+        private readonly bool _showPurchaseDate;
 
         public List<TuiAppInfo> SelectedApps => _originalAppInfo.Where(e => e.IsSelected).ToList();
 
-        public AppInfoDataSource(List<TuiAppInfo> itemList, bool showReleaseDate = true, bool showPlaytime = true)
+        public AppInfoDataSource(List<TuiAppInfo> itemList, bool showReleaseDate = true, bool showPlaytime = true, bool showPurchaseDate = false)
         {
             _currAppInfo = itemList;
             _showReleaseDate = showReleaseDate;
             _showPlaytime = showPlaytime;
+            _showPurchaseDate = showPurchaseDate;
+
             _originalAppInfo = itemList.ToList();
             _maxItemLength = _currAppInfo.Select(e => FormatItemString(e).Length).Max();
         }
@@ -79,6 +85,11 @@
             _currAppInfo = _currAppInfo.OrderByDescending(e => e.MinutesPlayed).ToList();
         }
 
+        public void SortPurchaseDate()
+        {
+            _currAppInfo = _currAppInfo.OrderByDescending(e => e.PurchaseDate).ToList();
+        }
+
         public void SortSelected()
         {
             _currAppInfo = _currAppInfo.OrderByDescending(e => e.IsSelected)
@@ -86,23 +97,33 @@
                                        .ToList();
         }
 
+        /// <summary>
+        /// Builds the string that is used as the TUI's header text.
+        /// </summary>
         public string FormatHeaderString()
         {
-            if (!_showPlaytime && !_showReleaseDate)
+            // If there are no extra columns enabled then just return the title only
+            if (!_showPlaytime && !_showReleaseDate && !_showPurchaseDate)
             {
                 // First column needs to be +3 additional characters, to account for the ' - ' added by the list control
                 return String.Format("{0,-58}", "   Title");
             }
 
-            return String.Format("{0,-58}{1,8}{2,17}", "   Title", "Released", "Recent Playtime");
+            return String.Format("{0,-58}{1,8}{2,17}{3,14}", "   Title", "Released", "Recent Playtime", "Purchased");
         }
 
         private string FormatItemString(TuiAppInfo item)
         {
+            // We cannot use the built-in padding method as it doesn't consider unicode.
+            // Titles with Chinese in them will throw off the padding for the whole row.
             var nameFormatted = item.Title.Truncate(55).PadRightUnicode(55);
-
             var hoursPlayed2Weeks = item.HoursPlayed != null ? $"{item.HoursPlayed:N1} hours" : null;
-            return string.Format("{0}{1,8}{2,17}", nameFormatted, item.ReleaseDate?.Date.ToString("yyyy"), hoursPlayed2Weeks);
+
+            return string.Format("{0}{1,8}{2,17}{3,14}",
+                nameFormatted,
+                item.ReleaseDate?.Date.ToString("yyyy"),
+                hoursPlayed2Weeks,
+                item.PurchaseDate?.Date.ToString("yyyy-MM-dd"));
         }
 
         public void Render(ListView container, ConsoleDriver driver, bool selected, int item, int col, int line, int width, int start = 0)

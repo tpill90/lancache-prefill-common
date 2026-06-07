@@ -105,7 +105,16 @@ namespace LancachePrefill.Common.SelectAppsTui
             sortPlaytimeButton.Clicked += SortPlaytime_OnClicked;
             sortPlaytimeButton.Enabled = _showPlaytime;
 
-            window.Add(sortLabel, sortNameButton, sortYearButton, sortPlaytimeButton, sortSelectedButton);
+            // Purchase Date
+            var sortPurchaseDateButton = new Button("Purchase Date")
+            {
+                X = Pos.Right(sortPlaytimeButton) + 1,
+                ColorScheme = _buttonColorScheme
+            };
+            sortPurchaseDateButton.Clicked += SortPurchaseDate_OnClicked;
+            sortPurchaseDateButton.Enabled = _showPurchaseDate;
+
+            window.Add(sortLabel, sortSelectedButton, sortNameButton, sortYearButton, sortPlaytimeButton, sortPurchaseDateButton);
 
             #endregion
 
@@ -164,8 +173,8 @@ namespace LancachePrefill.Common.SelectAppsTui
                 AllowsMultipleSelection = true
             };
             _listView.RowRender += ListView_RowRender;
-            _listView.Source = new AppInfoDataSource(appInfos, _showReleaseDate, _showPlaytime);
-            window.Add((View)_listView);
+            _listView.Source = new AppInfoDataSource(appInfos, _showReleaseDate, _showPlaytime, _showPurchaseDate);
+            window.Add(_listView);
 
             _statusBar = new StatusBar
             {
@@ -176,7 +185,7 @@ namespace LancachePrefill.Common.SelectAppsTui
                     HotNormal = new Attribute(foreground: Color.BrightGreen, background: Color.Black),
                 }
             };
-            Application.Top.Add((View)_statusBar);
+            Application.Top.Add(_statusBar);
         }
 
         public void Dispose()

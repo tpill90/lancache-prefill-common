@@ -9,6 +9,8 @@
         public int? MinutesPlayed { get; set; }
         public decimal? HoursPlayed => MinutesPlayed == null ? null : (decimal)MinutesPlayed / 60;
 
+        public DateTime? PurchaseDate { get; set; }
+
         public bool IsSelected { get; set; }
 
         public TuiAppInfo(string appId, string title)
