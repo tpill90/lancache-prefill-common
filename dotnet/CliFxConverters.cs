@@ -26,13 +26,17 @@
                 AnsiConsole.Markup(Red($"Valid units include : {LightYellow("bits/bytes")}"));
                 throw new CommandException(".", 1, true);
             }
-            if (!TransferSpeedUnit.TryFromValue(rawValue, out var _))
+
+            // Checking to make sure that the value provided is one of the enum's values
+            rawValue = rawValue.ToLower();
+            if (TransferSpeedUnit.TryFromValue(rawValue, out var _))
             {
-                AnsiConsole.MarkupLine(Red($"{White(rawValue)} is not a valid transfer speed unit!"));
-                AnsiConsole.Markup(Red($"Valid units include : {LightYellow("bits/bytes")}"));
-                throw new CommandException(".", 1, true);
+                return TransferSpeedUnit.FromValue(rawValue);
             }
-            return TransferSpeedUnit.FromValue(rawValue);
+
+            AnsiConsole.MarkupLine(Red($"{White(rawValue)} is not a valid transfer speed unit!"));
+            AnsiConsole.Markup(Red($"Valid units include : {LightYellow("bits/bytes")}"));
+            throw new CommandException(".", 1, true);
         }
     }
 }

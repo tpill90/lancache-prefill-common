@@ -11,6 +11,9 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
+    <!-- Required to be enabled in order to run this application on Ubuntu Docker images. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <!-- Defines a preprocessor constant that can be used to conditionally compile based on the target platform being Windows -->
@@ -31,7 +34,7 @@
   <ItemGroup>
     <!-- External Packages -->
     <PackageReference Include="ByteSize" Version="2.1.1" />
-    <PackageReference Include="Intellenum" Version="1.0.0-beta.3" />
+    <PackageReference Include="Intellenum" Version="2.0.1" />
     <PackageReference Include="Spectre.Console" Version="0.51.1" />
     <PackageReference Include="Terminal.Gui" Version="1.7.2" />
     <PackageReference Include="Wcwidth" Version="1.0.0" />
